@@ -3,7 +3,6 @@
 ### Contents:
 
 0. [The Master Theorem](#the-master-theorem)
-
 1. [The Chip Problem](#the-chip-problem)
 2. [Karatsuba Multiplication](#karatsuba-multiplication)
 3. [Mergesort](#mergesort)
@@ -14,7 +13,7 @@
 8. [Hoare's Algorithm](#hoare's-algorithm)
 9. [Binary Search](#binary-search)
 
-### 0. The Master Theorem
+### The Master Theorem
 
 I will cover this first since it is useful for solving many of the recurrence relations that will appear below. The theorem is used to solve recurrences of the form:
 
@@ -28,7 +27,7 @@ where $a \geq 1​$ and $b > 1​$, and $f(n)​$ is an asymptocially positive f
 
 It is important to note that in the first two cases, one function must be *polynomially* greater than the other, i.e. $n^{log_{b}(a) - \epsilon} > f(n)​$ for $\epsilon > 0​$ and vice versa. There is also an additional condition for case 3, where it must also be true that $ af(\frac{n}{b}) \leq cf(n)​$ for some $c < 1​$. This is known as the *regularity* condition, and it is satisfied by most polynomially-bounded functions (but it should still be checked).
 
-### 1. The Chip Problem
+### The Chip Problem
 
 **Problem:** *A factory produces chips that are either good (G) or bad (B). To evaluate their state, the chips can be paired in a testing device (oracle) where the two chips evaluate each other, i.e. each chip gives its opinion on whether the other is good or bad. Good chips tell the truth, while bad chips are unreliable. Given $N​$ chips, determine their state (G/B), with the premise that the set of good chips $G​$ is larger than the set of bad chips $B​$: $|G| > |B|​$. Complexity is measured in terms of the number of uses of the oracle.*
 
@@ -78,7 +77,7 @@ $T_{n} \leq  n(\frac{1}{2} + \frac{1}{4} + \frac{1}{8} ...) + 1 = n + 1$
 
 Therefore $T_{n} = O(n)​$. The sum of fractions in the last step can be evaluated as an infinite geometric series, where $r = \frac{1}{2}​$ and the sum is then $\frac{a_0}{1 - r} = \frac{\frac{1}{2}}{1 - \frac{1}{2}} = 1​$.
 
-### 3. Mergesort
+### Mergesort
 
 This algorithm sorts a list/array in time $\Theta(nlogn)$. The algorithm works as follows:
 
@@ -112,13 +111,13 @@ We can solve this recurrence with the master theorem. Here we have $a = 2$, $b =
 
 $n^{log_{2}2}  = n​$
 
-Which is asymptotically equal to $n-1​$. Therefore the overall complexity is $\Theta(f(n) \cdotp log_{b}n) = \Theta(nlog_{2}n)​$, as expected. 
+Which is asymptotically equal to $n-1$. Therefore the overall complexity is $\Theta(f(n) \cdotp log_{b}n) = \Theta(nlog_{2}n)$, as expected. 
 
-### 9. Binary Search
+### Binary Search
 
-**Problem:** *Given a sorted list and a target value $k$, return the index of $k$ in the sorted list or $-1$ if it is not in the list.*
+**Problem:** *Given a sorted list and a target value $k​$, return the index of $k​$ in the sorted list or $-1​$ if it is not in the list.*
 
-This algorithm can be done fairly simply with a ternary oracle, but it can also be done with a binary oracle. I will assume the typical implementation where we have a ternary oracle that compares two elements $x$ and $y$ and tells us if $x < y$, $x = y$ or $x > y​$. 
+This algorithm can be done fairly simply with a ternary oracle, but it can also be done with a binary oracle. I will assume the typical implementation where we have a ternary oracle that compares two elements $x$ and $y$ and tells us if $x < y$, $x = y$ or $x > y$. 
 
 **Solution:**
 
