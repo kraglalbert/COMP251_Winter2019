@@ -117,7 +117,7 @@ Which is asymptotically equal to $n-1$. Therefore the overall complexity is $\Th
 
 **Problem:** *Given a sorted list and a target value $k​$, return the index of $k​$ in the sorted list or $-1​$ if it is not in the list.*
 
-This algorithm can be done fairly simply with a ternary oracle, but it can also be done with a binary oracle. I will assume the typical implementation where we have a ternary oracle that compares two elements $x​$ and $y​$ and tells us if $x < y​$, $x = y​$ or $x > y​$. 
+This algorithm can be done fairly simply with a ternary oracle, but it can also be done with a binary oracle. I will assume the typical implementation where we have a ternary oracle that compares two elements $x$ and $y$ and tells us if $x < y$, $x = y$ or $x > y$. 
 
 **Solution:**
 
