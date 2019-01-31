@@ -12,7 +12,7 @@ public class DivideAndConquer {
      * @return the sorted array
      */
     public static int[] mergesort(int[] arr) {
-        return mergesort(arr, 0 ,arr.length-1);
+        return mergesort(arr, 0,arr.length-1);
     }
 
     /**
