@@ -20,7 +20,7 @@ I will cover this first since it is useful for solving many of the recurrence re
 
 $T_{n} = aT{\frac{n}{b} + f(n)}​$
 
-where $a \geq 1​$ and $b > 1​$, and $f(n)​$ is an asymptocially positive function. There are three cases for the theorem:
+where $a \geq 1$ and $b > 1$, and $f(n)$ is an asymptocially positive function. There are three cases for the theorem:
 
 1. $n^{log_{b}(a)}$ is asymptotically greater than $f(n)$. Then $T_{n} = \Theta(n^{log_{b}(a)})$.
 2. $f(n)​$ is asymptotically greater than $n^{log_{b}(a)}​$. Then $T_{n} = \Theta(f(n))​$.
