@@ -76,6 +76,13 @@ public class DivideAndConquer {
         return mergedArray;
     }
 
+    public static int gcd(int a, int b) {
+        int remainder = a % b;
+
+        if (remainder == 0) return b;
+        else return gcd(b, remainder);
+    }
+
     /**
      * Given a sorted array and a target value k, return the index of k in
      * the array or return -1 if it is not in the array.

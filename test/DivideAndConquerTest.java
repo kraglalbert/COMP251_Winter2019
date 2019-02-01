@@ -21,6 +21,18 @@ public class DivideAndConquerTest {
     }
 
     @Test
+    public void gcdTest() {
+        Assert.assertEquals(15, algorithms.DivideAndConquer.gcd(240, 45));
+        Assert.assertEquals(4, algorithms.DivideAndConquer.gcd(164, 144));
+        Assert.assertEquals(2, algorithms.DivideAndConquer.gcd(1024, 326));
+        Assert.assertEquals(16, algorithms.DivideAndConquer.gcd(1024, 560));
+        Assert.assertEquals(111, algorithms.DivideAndConquer.gcd(333, 222));
+        Assert.assertEquals(1, algorithms.DivideAndConquer.gcd(333, 124));
+        Assert.assertEquals(100, algorithms.DivideAndConquer.gcd(100, 100));
+        Assert.assertEquals(3, algorithms.DivideAndConquer.gcd(321, 123));
+    }
+
+    @Test
     public void binarySearchTest() {
         Assert.assertEquals(-1, algorithms.DivideAndConquer.binarySearch(new int[]{},3));
         Assert.assertEquals(3, algorithms.DivideAndConquer.binarySearch(new int[]{1,2,3,4,5},4));
