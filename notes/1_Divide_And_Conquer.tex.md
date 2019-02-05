@@ -10,8 +10,8 @@
 5. [Strassen Multiplication](#strassen-multiplication)
 6. [Fast Exponentiation](#fast-exponentiation)
 7. [Euclid's Algorithm for GCD](#euclid's-algorithm-for-gcd)
-8. [Linear-Time Selection](#linear-time-selection)
-9. [Hoare's Algorithm](#hoare's-algorithm)
+8. [Linear Time Selection](#linear-time-selection)
+9. [Quickselect](#quickselect)
 10. [Binary Search](#binary-search)
 
 ## The Master Theorem
@@ -125,10 +125,10 @@ This algorithm sorts a list/array in time $\Theta(nlogn)​$. The algorithm work
 
 ```
 func mergesort(list) {
-    if (list.length <= 1) return list
+    if (size(list) <= 1) return list
     else {
         leftList = mergesort(list[0..middle])
-        rightList = mergesort(list[middle+1..length-1])
+        rightList = mergesort(list[middle+1..size(list)-1])
         
         merge(leftList, rightList)
     }
@@ -148,6 +148,46 @@ We can solve this recurrence with the master theorem. Here we have $a = 2$, $b =
 $n^{log_{2}2}  = n​$
 
 Which is asymptotically equal to $n-1$. Therefore the overall complexity is $\Theta(f(n) \cdotp log_{b}n) = \Theta(nlog_{2}n)$, as expected. 
+
+## Strassen Multiplication
+
+**Problem:** *Given two $n \times n$ matrices, multiply them together, i.e. compute $A \times B = C$.*
+
+**Solution:** This operation can be done in a straightforward way that takes $\Theta(n^3)$ time by using the method learned in MATH 133. However, we can utilize a divide-and-conquer approach if we split $A$ and $B$ up into four quadrants, where each quadrant has size $\frac{n}{2} \times \frac{n}{2}$. Then, these quadrants can be used to compute the four quadrants of $C$ in 8 recursive calls. Unfortunately, this also takes $\Theta(n^3)$ time, so it is no better than the traditional approach.
+
+Using a carefully selected set of operations, it is possible to compute $C$ using only 7 recursive calls. The operations are:
+
+$M_1 = (A_1 + A_4)(B_1 + B_4)​$
+
+$M_2 = (A_3 + A_4)B_1$
+
+$M_3 = A_1(B_2 - B_4)$
+
+$M_4 = A_4(B_3 - B_1)$
+
+$M_5 = (A_1 + A_2)B_4$
+
+$M_6 = (A_3 - A_1)(B_1 + B_2)$
+
+$M_7 = (A_2 - A_4)(B_3 + B_4)$
+
+Assuming $C_1$ to $C_4$ represent the four quadrants of $C$, where $C_1$ is the top left quadrant, we can calculate $C$ with the following equations:
+
+$C_1 = M_1 + M_4 - M_5 + M_7$
+
+$C_2 = M_3 + M_5$
+
+$C_3 = M_2 + M_4$
+
+$C_4 = M_1 - M_2 + M_3 + M_6$
+
+**Complexity:**
+
+The 7 recursive calls give a runtime of:
+
+$T_{n} \leq n^2 + 7T_{\frac{n}{2}}$
+
+Which evaluates to $\Theta(n^{log_27})$ by the master theorem.
 
 ## Fast Exponentiation
 
@@ -198,7 +238,7 @@ This is a neat algorithm that most people will probably also see/have seen in MA
 
 **Solution:**  
 
-Let $gcd(a,b)$ be a function that computes the GCD of two integers $a$ and $b$. The algorithm for computing the GCD is as follows:
+Let $gcd(a,b)$ be a function that computes the GCD of two integers $a$ and $b​$. The algorithm for computing the GCD is as follows:
 
 * Place the larger of the two numbers in the left slot of the function. For simplicity, assume that $a > b$ for the steps below.
 * Compute $\frac{a}{b}$, and find the remainder $r$. If $r = 0$, then the GCD is $b$ and the algorithm halts. If $r > 0$, then we call $gcd(b, r)$ and repeat until the remainder becomes zero.
@@ -218,7 +258,90 @@ func gcd(a, b) {
 
 **Complexity:**
 
+The complexity is $T_{n} \leq 2log_2n$ for $gcd(n, b)$, since $n$ get halved every 2 calls. We also know that a number can only get halved $log_2n$ times, and hence the algorithm must terminate with that many recursive calls in the worst case.
 
+## Linear Time Selection
+
+**Problem:** *Given an unsorted set of elements $A$, return the $k^{th}$ smallest element from the set.*
+
+**Solution:** The following is an algorithm created by Blum, Floyd, Pratt, Rivest and Tarjan that solves the problem above in guaranteed linear time. The steps of the algorithm can be summarized as follows:
+
+* Group all of the elements in $A$ into groups of 5. One group will have 5 or less elements if $|A|$ is not cleanly divisible by 5.
+* In each group of 5, find the median element. This can always be done with 6 comparisons, i.e. constant time. 
+* Group all of the medians into a new set $M​$, and repeat the 2 steps above recursively. Once the size of the set becomes smaller than or equal to 5, then the median can be found directly. Ultimately the "median of medians" is returned by this recursive process.
+* Once the median of medians is found (call it $m$), then it can be used as a pivot element. Each element in $A$ is placed into one of two sets: $L$ if the element is smaller than $m$, and $R$ if the element is greater than $m$. If $|L| = k - 1$, then we can return $m$ as the $k^{th}$ smallest element. Otherwise, the algorithm will be called recursively on either $L$ or $R$.
+* Continue doing this until $m$ is the desired element, or until the size of the set becomes $\leq$ 5.
+
+**Pseudocode:**
+
+```
+func select(k, A) {
+    if (size(A) <= 5) {
+        sort(A) // In 6 comparisons
+        return A[k] // Return the kth element of A
+    } else {
+        // Group all elements into groups of 5 and find the median of each
+        M = group(A)
+        
+        // Find the median of medians
+        // |M|/2 corresponds to the middle element of M
+        m = select(size(M)/2, M)
+        
+        // Add the elements of A to either L or R
+        for i = 0 to size(A)-1 do {
+            if (A[i] < m) L.add(A[i])
+            if (A[i] > m) R.add(A[i])
+        }
+        
+        if (size(L) = k-1) {
+        	return m
+        } else if (size(L) > k-1) {
+        	// The kth smallest element is somewhere in L 
+            return select(k, L)
+        } else {
+        	// The kth smallest element is somewhere in R
+            return select(k-size(L)-1, R)
+        }
+    }
+}
+```
+
+**Complexity:**
+
+
+
+## Quickselect
+
+This algorithm, developed by Tony Hoare, provides an alternate method of finding the $k^{th}$ smallest element. It has good average-case performance but its worst case performance is not great.
+
+Quickselect works similar to Quicksort in that it selects a pivot and partitions the list elements into two (not necessarily equal-sized) halves, where one half contains all elements smaller than the pivot and the other contains all elements greater than the pivot. After partitioning, the pivot will be in its final sorted position, and so we know which half the $k^{th}$ smallest is in. The algorithm then recurses on this half only.
+
+**Pseudocode:**
+
+```
+func quickselect(list, k) {
+    if (size(list) = 1) return list[0]
+    else {
+    	// Select a pivot index, typically done at random
+        pivotIndex = ... 
+        
+       	// Assume partition returns the pivotIndex's sorted location
+        pivotIndex = partition(list, pivotIndex)
+        
+        if (pivotIndex = k) {
+        	return list[pivotIndex]
+        } else if (pivotIndex < k) {
+            quickselect(list[pivotIndex+1..size(list)-1], k)
+        } else {
+            quickselect(list[0..pivotIndex-1], k)
+        }
+    }
+}
+```
+
+**Complexity:**
+
+In the best and average case runtimes, Quickselect runs in $\Theta(n)$ time. However, in the worst case it runs in $\Theta(n^2)$ time. The algorithm's performance depends almost entirely on how the pivot is selected, and if this is done poorly (e.g. always selecting the first element in an already sorted list) the problem size will only decrease by 1 with each iteration, giving a runtime of $\Theta(n^2)$. 
 
 ## Binary Search
 
@@ -235,14 +358,14 @@ This algorithm can be done fairly simply with a ternary oracle, but it can also 
 
 ```
 func binarySearch(list, k) {
-	if (list.length < 1) {
+	if (size(list) < 1) {
 		return -1
     } else if (list[middle] = k) {
     	return middle
     } else if (list[middle] > k) {
     	return binarySearch(list[0..middle-1], k)
     } else {
-    	return binarySearch(list[middle+1..k], k)
+    	return binarySearch(list[middle+1..size(list)-1], k)
 	}
 }
 ```
@@ -255,8 +378,8 @@ At each step of the algorithm, we make a call to a problem of size $\frac{n}{2}�
 
 $T_{n} \leq 1 + T_{\frac{n}{2}}​$
 
-We can determine the overall complexity using the master theorem. We have $a = 1, b = 2$ and $f(n) = 1​$, which gives us:
+We can determine the overall complexity using the master theorem. We have $a = 1, b = 2​$ and $f(n) = 1​$, which gives us:
 
 $n^{log_{2}1} = n^0 = 1​$ 
 
-Which is directly equal to $f(n)$. Hence the overall complexity is $\Theta(f(n) \cdotp log_{b}n) = \Theta(log_{2}n)$.
+Which is directly equal to $f(n)​$. Hence the overall complexity is $\Theta(f(n) \cdotp log_{b}n) = \Theta(log_{2}n)​$.
