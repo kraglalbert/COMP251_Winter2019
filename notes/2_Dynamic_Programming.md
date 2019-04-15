@@ -37,7 +37,7 @@ func cutRod(N, P) {
         maxVal = -INF
         for j = 1 to i {
         		// Take the max over all possible cuts, considering previous values
-            maxVal = max(maxVal, P[j] + P[i-j])
+            maxVal = max(maxVal, P[j] + R[i-j])
         }
         R[i] = maxVal
     }
@@ -65,7 +65,7 @@ This can be implemented in a straightforward recursive program. However, each su
 
 Naive recursive algorithm:
 
-```
+```java
 func binom(n, k) {
     if (k = 0 or k = n) return 1
     else if (k > n) return 0
@@ -77,7 +77,7 @@ func binom(n, k) {
 
 DP algorithm:
 
-```
+```java
 func binom(n, k, cache) {
     if (k = 0 or k = n) return 1
     else if (k > n) return 0
@@ -91,7 +91,7 @@ func binom(n, k, cache) {
 
 **Complexity:**
 
-In the naive implementation, the runtime is $\Theta(2^n)​$. The DP implementation improves the runtime to $\Theta(nk)​$.
+In the naive implementation, the runtime is $\Theta(2^n)$. The DP implementation improves the runtime to $\Theta(nk)$.
 
 ## The K-Subsets Partitioning Problem
 
@@ -111,8 +111,8 @@ It is important to note that the first term in the recurrence must be multiplied
 
 ```java
 func subsetPartition(n, k) {
-	P[n, 1] = 1
-	P[n, n] = 1
+		P[n, 1] = 1
+		P[n, n] = 1
     
     for i = 1 to n {
         for j = 1 to min(k, i) {
@@ -152,7 +152,7 @@ By removing $l$ from $S$, we reduce our problem size and create a subproblem. Th
 
 ```java
 func tsp(dist) {
-	// Fill base cases in table
+		// Fill base cases in table
     for j = 2 to n { 
         L[1, {}, j] = dist[1, j]
     } 
@@ -160,7 +160,7 @@ func tsp(dist) {
     for k = 2 to n-1 { // Consider subsets of all sizes
         for all subsets where |S| = k and S is a subset of {1,2...,n} {
             for all j not in S {
-            	// The min is over all l in S
+            		// The min is over all l in S
                 L[1, S, j] = min(L[1, S-{l}, l] + dist[l, j])
             }
         }
@@ -201,7 +201,7 @@ To create our DP relationship, we can observe all of the possible cases for $P[i
   * Do not include the current element in the final solution. Then, we must see if $P[i-1, j]$ is true or false.
   * Include the current element in the final solution. Then we check $P[i-1, j-N[i]]$.
 
-This can be done to fill up the entire table. It is worth noting that if the goal of the algorithm is only to see if a solution exists, then only $P[i, j]$ is required. However, if actual solution itself needs to be returned, then $S[i, j]​$ is required as well.
+This can be done to fill up the entire table. It is worth noting that if the goal of the algorithm is only to see if a solution exists, then only $P[i, j]$ is required. However, if the actual solution itself needs to be returned, then $S[i, j]$ is required as well.
 
 **Pseudocode:**
 
@@ -212,19 +212,19 @@ func knapsack(N, k) {
     for i = 0 to size(N)-1 {
         for j = 0 to k {
             if (i = 0 and j = 0) {
-            	P[0,0] = true
+            		P[0,0] = true
             } else if (i = 0 and j > 0) {
-            	P[0,j] = false   
+            		P[0,j] = false   
             } else {
-            	if (N[i] = j) {
-                	P[i,j] = true  
-            	} else if (N[i] > j) { // Element is too big
+            		if (N[i] = j) {
+                		P[i,j] = true  
+            		} else if (N[i] > j) { // Element is too big
                     P[i,j] = P[i-1,j]
-            	} else {
-            		// Check if it possible to make a subset of size j
-            		// by including the element or excluding it
+            		} else {
+            				// Check if it possible to make a subset of size j
+            				// by including the element or excluding it
                   	P[i,j] = P[i-1, j] or P[i-1, j-N[i]]  
-            	}
+            		}
             }
         }
     }
@@ -239,26 +239,26 @@ func knapsack(N, k) {
     for i = 0 to size(N)-1 {
         for j = 0 to k {
             if (i = 0 and j = 0) {
-            	P[0,0] = true
+            		P[0,0] = true
             } else if (i = 0 and j > 0) {
-            	P[0,j] = false   
+            		P[0,j] = false   
             } else {
-            	if (N[i] = j) {
-                	P[i,j] = true  
-                	S[i,j] = true
-            	} else if (N[i] > j) { // Element is too big
+            		if (N[i] = j) {
+                		P[i,j] = true  
+                		S[i,j] = true
+            		} else if (N[i] > j) { // Element is too big
                     P[i,j] = P[i-1,j]
                     S[i,j] = false
-            	} else if (P[i-1, j] = true) {
+            		} else if (P[i-1, j] = true) {
                   	P[i,j] = true
                   	S[i,j] = false
-            	} else if (P[i-1, j-N[i]] = true) {
+                } else if (P[i-1, j-N[i]] = true) {
                     P[i,j] = true
                     S[i,j] = true
-            	} else {
+                } else {
                     P[i,j] = false
                     S[i,j] = false
-            	}
+            		}
             }
         }
     }
@@ -268,8 +268,8 @@ func knapsack(N, k) {
    	if (P[size(N)-1, k] = true) {
         for i = size(N)-1 to 0 {
             if (S[i,j] = true) {
-            	output N[i]
-            	j = j - N[i]
+            		output N[i]
+            		j = j - N[i]
             }
         }
    	} else {
@@ -304,7 +304,7 @@ func assign(N) {
         for all subsets A, B of size k {
             if (k = 0) best[A,B] = 0
             else {
-            	// For all i in A, j in B
+            		// For all i in A, j in B
                 best[A,B] = max(N[i,j] + best[A-{i},B-{j}])
             }
         } 

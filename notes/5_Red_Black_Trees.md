@@ -58,7 +58,7 @@ When given a binary search tree, it is possible that it can have multiple valid 
 
 > **Proposition:** A red-black tree with $n$ internal nodes has $n+1$ external nodes.
 
-We can now consider a *2-3-4 view* of a red-black tree. Since the rank does not change when going up from a black node to a red node, we separate a red-black tree into "levels" by rank (i.e. all nodes of rank 2 are on one level, all nodes of rank 3 are on the level above that, etc.). In this setup, red nodes appear between levels. 
+We can now consider a *2-3-4 view* of a red-black tree. Since the rank does not change when going up from a red node to a black node, we separate a red-black tree into "levels" by rank (i.e. all nodes of rank 2 are on one level, all nodes of rank 3 are on the level above that, etc.). In this setup, red nodes appear between levels. 
 
 When viewing a tree like this, there are four different *pods* that appear:
 
@@ -98,30 +98,30 @@ The pseudocode for FIX is below:
 ```java
 func fix(x) {
     while (x.gp != null and (x.parent.colour = red) and (x.uncle.colour = red)) {
-    	// Case 1
-    	x.gp.rank = x.gp.rank + 1
-    	// Change colours to match new rank
-    	x.parent.colour = black
-    	x.uncle.colour = black
-    	x.gp.colour = red
-    	// Move up and repeat as many times as necessary
-    	x = x.gp
-	}
-	if (x = root) {
+    		// Case 1
+    		x.gp.rank = x.gp.rank + 1
+    		// Change colours to match new rank
+    		x.parent.colour = black
+    		x.uncle.colour = black
+    		x.gp.colour = red
+    		// Move up and repeat as many times as necessary
+    		x = x.gp
+    }
+    if (x = root) {
         return // Halt
     } else if (x.parent = root and x.sibling.colour = red) {
-       	// Case 2
+        // Case 2
         x.parent.rank = x.parent.rank + 1
         x.colour = black
         x.sibling.colour = black
         return
-	} else if (x.parent.colour = black) {
+    } else if (x.parent.colour = black) {
         return // Halt, nothing left to fix (case 3)
     } else {
         // x.parent.colour = red and x.uncle.colour = black (case 4)
-		rotation(x) // See definition below
-		return
-	}
+        rotation(x) // See definition below
+        return
+    }
 }
 ```
 
@@ -208,7 +208,7 @@ The pseudocode for the entire algorithm is below:
 
 ```java
 func join(t1, t2) {
-	// Find the minimum element in t2
+		// Find the minimum element in t2
     d = min(t2)
     // Delete d from t2 and fix the tree
     delete(t2, d)
