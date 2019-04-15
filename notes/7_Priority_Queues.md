@@ -96,11 +96,11 @@ The pseudocode is given below:
 
 ```java
 func heapSort(H) {
-	// Convert array into a heap 
+		// Convert array into a heap 
     H = buildHeap(H) 
     
     for (i = H.size downto 2) {
-    	// Swap the root with the rightmost unsorted element
+    		// Swap the root with the rightmost unsorted element
         H.swap(1, i)
         
         // Fix up the heap from the first to i-th element

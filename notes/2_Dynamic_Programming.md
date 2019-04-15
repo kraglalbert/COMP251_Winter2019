@@ -36,7 +36,7 @@ func cutRod(N, P) {
     for i = 1 to N {
         maxVal = -INF
         for j = 1 to i {
-        	// Take the max over all possible cuts, considering previous values
+        		// Take the max over all possible cuts, considering previous values
             maxVal = max(maxVal, P[j] + P[i-j])
         }
         R[i] = maxVal
