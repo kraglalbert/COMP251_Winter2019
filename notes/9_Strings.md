@@ -137,11 +137,14 @@ func rabinKarpe(T, P) {
   	for i = 1 to n-m {
    			if (tHash = pHash) { // Potential match
     				pIndex = 1
-    				matchFound = false
+    				matchFound = true
     	
       			for j = i to j+m {
       					// Not a true match
-        				if (P[pIndex] != T[j]) break
+        				if (P[pIndex] != T[j]) {
+                  	matchFound = false
+                    break
+                }
         				pIndex++
      				}
       			if (matchFound) return i // Return index of pattern in T
